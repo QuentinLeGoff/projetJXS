@@ -1,5 +1,6 @@
-Bootstrap_Metro_Dashboard
-=========================
+
+# projetJXS
+Tableau de bord pour vélo éléctrique
 
 A Metro Style Dashboard Template with Twitter Bootstrap
 
@@ -50,3 +51,5 @@ http://modernizr.com/
     retina.js
     
 http://retinajs.com
+
+
