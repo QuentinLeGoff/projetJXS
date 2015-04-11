@@ -45,10 +45,13 @@ jQuery(document).ready(function($){
 	
 });	
 
-$(document).ready(function(){
-		
-			
-	$("#username").focus(function() {
+$(document).ready(function(){	
+	activateFunctions();			
+});
+
+// Activate animations & fonctions
+function activateFunctions(){
+		$("#username").focus(function() {
 		
 		$(this).parent(".input-prepend").addClass("input-prepend-focus");
 	
@@ -74,7 +77,7 @@ $(document).ready(function(){
 	
 				
 	/* ---------- Add class .active to current link  ---------- */
-	$('ul.main-menu li a').each(function(){
+	/*$('ul.main-menu li a').each(function(){
 		
 			if($($(this))[0].href==String(window.location)) {
 				
@@ -93,7 +96,8 @@ $(document).ready(function(){
 				
 			}
 	
-	});
+	});*/
+	
 	
 	/* ---------- Submenu  ---------- */
 	
@@ -126,8 +130,7 @@ $(document).ready(function(){
 	
 	chart();
 	messageLike();	
-	
-});
+};
 
 /* ---------- Like/Dislike ---------- */
 
