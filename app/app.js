@@ -10,13 +10,16 @@ webikeApp.config(['$routeProvider','$locationProvider',
 
     $routeProvider
     .when('/', {
+      title: "Dashboard | WeBike",
       templateUrl: 'template/home.html'
       })
     .when('/history', {
+        title: "Mon historique | WeBike",
         templateUrl: 'template/history.html',
         controller: 'HistoryController'
       })
     .when('/performances', {
+        title: "Mes performances | WeBike",
         templateUrl: 'template/performances.html',
         controller: 'PerformancesController'
       })
@@ -42,5 +45,11 @@ webikeApp.controller('webikeController', ['$scope', '$http', '$location',
         return viewLocation === $location.path();
     };
 
-
   }]);
+
+// Mise à jour du titre de la page en fonction de la route
+webikeApp.run(['$location', '$rootScope', function($location, $rootScope) {
+    $rootScope.$on('$routeChangeSuccess', function (event, current, previous) {
+        $rootScope.title = current.$$route.title;
+    });
+}]);
