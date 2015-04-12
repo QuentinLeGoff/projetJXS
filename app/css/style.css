@@ -1583,6 +1583,8 @@ ul.chat.metro li.right .message .arrow {
 fieldset[disabled] .btn {
   cursor: default;
   opacity: 0.65;
+  background-color: #5694CA;
+  border-color: #578EBE;
   filter: alpha(opacity=65);
   -webkit-box-shadow: none;
           box-shadow: none;
@@ -2069,14 +2071,12 @@ fieldset[disabled] .btn-link:focus {
 .login-box h2 {
 	color: #646464;
 	margin-left: 30px;
-	font-family: monaco;
 	font-weight: normal;
 }
 
 .login-box h3 {
 	color: #646464;
 	margin-left: 30px;
-	font-family: monaco;
 	font-weight: normal;
 }
 
