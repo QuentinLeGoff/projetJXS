@@ -14,6 +14,11 @@ webikeApp.config(['$routeProvider','$locationProvider',
       title: "Dashboard | WeBike",
       templateUrl: 'template/home.html'
     })
+    .when('/login', {
+      title: "Connexion | WeBike",
+      templateUrl: 'template/login.html',
+      controller: 'LoginController'
+    })
     .when('/history', {
       title: "Mon historique | WeBike",
       templateUrl: 'template/history.html',
@@ -46,31 +51,35 @@ webikeApp.controller('webikeController', ['$scope', '$http', '$location', 'Auth'
       return viewLocation === $location.path();
     };
 
+    $scope.loggedIn = function (){
+      return Auth.IsLoggedIn();
+    }
+
     // Logout
     $scope.logout = function (){
       Auth.RemoveCookie();
-      window.location = "/app/login.html"; // redirect
+      $location.path('/login');
     };
 
   }]);
 
 webikeApp.run(['$location', '$rootScope', '$cookieStore', '$http', function ($location, $rootScope, $cookieStore, $http) {
 
-    // Redirection sur /login.html si pas connecté
+    // Redirection vers /login si pas connecté
     $rootScope.$on('$routeChangeStart', function (event, next, current) {
       $rootScope.globals = $cookieStore.get('globals') || {};
       if ($rootScope.globals.currentUser) {
         $http.defaults.headers.common['Authorization'] = 'Basic ' + $rootScope.globals.currentUser.authdata; // jshint ignore:line
       }
 
-      // Si connecté et location == login page -> redirige vers Home
-      if ($rootScope.globals.currentUser &&  window.location.pathname == '/app/login.html'){
-        window.location = "/app";
+      // Si connecté et location == login page -> redirige vers /
+      if ($rootScope.globals.currentUser &&  $location.path() == "/login"){
+        $location.path('/');
       }
 
-      // Si non-connecté -> redirige vers page Login
-      if (!$rootScope.globals.currentUser) {
-        window.location = "/app/login.html";
+      // Si non-connecté -> redirige vers /login
+      if ($location.path() !== '/login' && !$rootScope.globals.currentUser) {
+        $location.path('/login');
       }
     });
 
@@ -119,6 +128,12 @@ webikeApp.factory('Auth', ['$http', '$cookieStore', '$rootScope',
       $rootScope.globals = {};
       $cookieStore.remove('globals');
       $http.defaults.headers.common.Authorization = 'Basic ';
+    };
+
+    // Check si l'utilisateur est connecté
+    service.IsLoggedIn = function (){
+      var glob = $cookieStore.get('globals') || {};
+      return !angular.isUndefined(glob.currentUser);
     };
 
     return service;

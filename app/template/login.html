@@ -1,0 +1,27 @@
+<div id="content" class="span12" style="width:100%; margin-left:0 !important; background: url(img/bg-login.jpg) !important;">
+	<div class="login-box">
+		<div class="icons">
+		</div>
+		<h2>Connexion au tableau de bord <b>WeBike</b></h2>
+		<div ng-show="error" class="alert alert-error">{{error}}</div>
+		<form name="form" class="form-horizontal" ng-submit="login()" role="form">
+			<div class="input-prepend" title="Nom d'utilisateur">
+				<span class="add-on"><i class="halflings-icon user"></i></span>
+				<input class="input-large span10" name="username" id="username" type="text" placeholder="nom d'utilisateur" ng-model="username" required/>
+			</div>
+
+			<div class="clearfix"></div>
+
+			<div class="input-prepend" title="Mot de passe">
+				<span class="add-on"><i class="halflings-icon lock"></i></span>
+				<input class="input-large span10" name="password" id="password" type="password" placeholder="mot de passe" ng-model="password" required/>
+			</div>
+			<div class="clearfix"></div>
+			<p><code>{username : test, password : test}</code></p>
+			<div class="button-login">	
+				<button type="submit" class="btn btn-primary" ng-disabled="form.$invalid">Connexion</button>
+			</div>
+			<div class="clearfix"></div>
+		</form>
+	</div><!--/span-->
+</div>
