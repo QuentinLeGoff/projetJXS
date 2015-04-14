@@ -12,7 +12,8 @@ webikeApp.config(['$routeProvider','$locationProvider',
     $routeProvider
     .when('/', {
       title: "Dashboard | WeBike",
-      templateUrl: 'template/home.html'
+      templateUrl: 'template/home.html',
+      controller: 'HomeController'
     })
     .when('/login', {
       title: "Connexion | WeBike",
@@ -63,7 +64,7 @@ webikeApp.controller('webikeController', ['$scope', '$http', '$location', 'Auth'
 
   }]);
 
-webikeApp.run(['$location', '$rootScope', '$cookieStore', '$http', function ($location, $rootScope, $cookieStore, $http) {
+webikeApp.run(['$location', '$rootScope', '$cookieStore', '$http', 'BatteryLevelPolling', function ($location, $rootScope, $cookieStore, $http, BatteryLevelPolling) {
 
     // Redirection vers /login si pas connecté
     $rootScope.$on('$routeChangeStart', function (event, next, current) {
@@ -86,6 +87,8 @@ webikeApp.run(['$location', '$rootScope', '$cookieStore', '$http', function ($lo
     // Mise à jour du titre de la page en fonction de la route
     $rootScope.$on('$routeChangeSuccess', function (event, current, previous) {
       $rootScope.title = current.$$route.title;
+      // Stop polling BatteryLevel
+      BatteryLevelPolling.stopPolling();
     });
 
   }]);
