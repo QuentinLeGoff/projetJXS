@@ -21,12 +21,20 @@ webikeControllers.controller('HistoryController', ['$scope', '$http',
    
   }]);
 
-webikeControllers.controller('HomeController', ['$scope', '$http', 'BatteryLevelPolling',
-  function ($scope, $http, BatteryLevelPolling) {
+webikeControllers.controller('HomeController', ['$scope', '$http', 'BatteryLevelPolling', 'batteryLevel',
+  function ($scope, $http, BatteryLevelPolling, batteryLevel) {
     // Widget batterie
-    $scope.autonomy = "80 mins";
+    $scope.autonomy = "80 min";
+    
+    // start polling
     BatteryLevelPolling.startPolling();
 
+    // updateBatteryLevel
+    $scope.$watch(function(scope) { return batteryLevel.level; },
+      function(newValue, oldValue) {
+          updateBatteryLevel(newValue);
+      }
+    );
 
   }]);
 
@@ -36,9 +44,13 @@ webikeControllers.controller('PerformancesController', ['$scope', '$http',
   }]);
 
 /* ----------------------------------- FACTORY/SERVICES ----------------------------------- */
+// BatteryLevel
+webikeApp.factory('batteryLevel',function () {
+  return { level : 50 };
+});
 
 // BatteryLevelPolling : Récupère le niveau de la batterie toutes les x secondes
-webikeApp.factory('BatteryLevelPolling', [function(){
+webikeApp.factory('BatteryLevelPolling', ['batteryLevel', '$interval', function(batteryLevel,$interval){
   var pollingTime = 3000;
   var polls = {};
   var calls = 0;
@@ -48,11 +60,11 @@ webikeApp.factory('BatteryLevelPolling', [function(){
           var poller = function() {
             var level = Math.floor((Math.random() * 100)); // TODO
             if(calls == 0) initBatteryLevel(level);
-            updateBatteryLevel(level);
+            batteryLevel.level = level;
             calls++;
           }
           poller();
-          polls = setInterval(poller, pollingTime);
+          polls = $interval(poller, pollingTime);
       },
 
       stopPolling: function() {
@@ -60,7 +72,7 @@ webikeApp.factory('BatteryLevelPolling', [function(){
           delete polls;
           calls = 0;
       }
-  }
+  };
 }]);
 
 /* ----------------------------------- FUNCTIONS ----------------------------------- */

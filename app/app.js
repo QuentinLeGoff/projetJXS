@@ -38,9 +38,12 @@ webikeApp.config(['$routeProvider','$locationProvider',
 
 
 // Main controller
-webikeApp.controller('webikeController', ['$scope', '$http', '$location', 'Auth',
-  function ($scope, $http, $location, Auth) {
+webikeApp.controller('webikeController', ['$scope', '$http', '$location', 'Auth', 'batteryLevel',
+  function ($scope, $http, $location, Auth, batteryLevel) {
     $scope.user = {firstName : "Soren", lastName : "Bjerg"};
+    $scope.notifications = [];
+    $scope.notification_message = "Pas de notifications";
+    $scope.notification_count = 0;
 
     // Appel de ActivateFunctions() qui active les animations et les fonctions des composants
     $scope.$on('$viewContentLoaded', function () {
@@ -62,7 +65,54 @@ webikeApp.controller('webikeController', ['$scope', '$http', '$location', 'Auth'
       $location.path('/login');
     };
 
+    $scope.$watch(function(scope) { return batteryLevel.level; },
+      function(newValue, oldValue) {
+          notifications(newValue);
+      },true
+    );
+
+
+    // manage notifications
+    function majNotificationText(){
+      var count = $scope.notification_count;
+      if(count == 0){
+        $scope.notification_message = "Pas de notifications";
+      } else if(count == 1) {
+        $scope.notification_message = $scope.notification_count + " notification";     
+      } else {
+        $scope.notification_message = $scope.notification_count + " notifications";     
+      }
+    };
+
+    // supprimme notification
+    $scope.removeNotification = function(notif) {
+      var index = $scope.notifications.indexOf(notif);
+      $scope.notifications.splice(index, 1);
+      $scope.notification_count--;
+      majNotificationText();
+    };
+
+    // si batterie < 10% -> notif 
+    // si batterie = 100% -> notif
+    function notifications(val){
+      if(val < 50) {
+        var date = new Date();
+        var date_text = date.getHours() + "h" + (date.getMinutes()<10 ? '0':'') + date.getMinutes();
+        $scope.notifications.push({type: "alert", message:"Batterie presque déchargée !", date: date_text});
+        $scope.notification_count++;
+        majNotificationText();
+      }else if(val == 100){
+        var date = new Date();
+        var date_text = date.getHours() + "h" + (date.getMinutes()<10 ? '0':'') + date.getMinutes();
+        $scope.notifications.push({type: "info", message:"La batterie est chargée !", date: date_text});
+        $scope.notification_count++;
+        majNotificationText();
+      }
+    };
+
   }]);
+
+/* ----------------------------------- RUN ----------------------------------- */
 
 webikeApp.run(['$location', '$rootScope', '$cookieStore', '$http', 'BatteryLevelPolling', function ($location, $rootScope, $cookieStore, $http, BatteryLevelPolling) {
 

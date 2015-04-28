@@ -65,7 +65,35 @@
 								
 				<!-- start: Header Menu -->
 				<div class="nav-no-collapse header-nav" ng-show="loggedIn()">
-					<ul class="nav pull-right">						
+					<ul class="nav pull-right">
+
+						<!-- notifications -->
+						<li class="dropdown hidden-phone">
+							<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+								<i class="icon-bell"></i>
+								<span class="badge red" ng-if="notification_count != 0">{{notification_count}}</span>
+							</a>
+							<ul class="dropdown-menu notifications">
+								<li class="dropdown-menu-title">
+ 									<span>{{notification_message}}</span>
+								</li>
+
+								<li ng-repeat="n in notifications">
+                            		<a href="" ng-click="removeNotification(n)" ng-if="n.type == 'alert'">
+										<span class="icon red"><i class="icon-bolt"></i></span>
+										<span class="message">{{n.message}}</span>
+										<span class="time">{{n.date}}</span>
+                                    </a>
+                                    <a href="" ng-click="removeNotification(n)" ng-if="n.type == 'info'">
+										<span class="icon green"><i class="icon-bolt"></i></span>
+										<span class="message">{{n.message}}</span>
+										<span class="time">{{n.date}}</span>
+                                    </a> 
+			                    </li>								
+							</ul>
+						</li>
+						<!-- END notifications -->
+
 						<!-- start: User Dropdown -->
 						<li class="dropdown">
 							<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
