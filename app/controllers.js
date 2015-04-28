@@ -27,6 +27,18 @@ webikeControllers.controller('HomeController', ['$scope', '$http', 'BatteryLevel
     $scope.autonomy = "80 mins";
     BatteryLevelPolling.startPolling();
 
+    // Widget All Time Record
+    $scope.maxSpeed = getMaxSpeed();
+
+    var distance = getDistanceSinceLastRecharge();
+    var maxDistance = getMaxDistanceBetweenTwoRecharge();
+    if(distance > maxDistance){
+      $scope.maxDistance = distance.toFixed(1);
+      updateMaxDistanceBetweenTwoRecharge(distance);
+    }else{
+      $scope.maxDistance = maxDistance.toFixed(1);
+    }
+
 
   }]);
 
@@ -91,3 +103,34 @@ function updateBatteryLevel (value){
     }
   });
 };
+
+function getMaxSpeed(){
+  var speed = distances[0].vitesse_max;
+  for(var i=1; i<distances.length;i++){
+    if(distances[i].vitesse_max > speed) speed = distances[i].vitesse_max;
+  }
+  return speed;
+}
+
+function getDistanceSinceLastRecharge(){
+  var distance = 0;
+
+  // Last Date recharge (request bdd)
+  var lastDate = new Date(lastDateRecharge.annee,lastDateRecharge.mois,lastDateRecharge.jour);
+
+
+  for(var i=0; i<distances.length;i++){
+    var currentDate = new Date(distances[i].date.annee,distances[i].date.mois,distances[i].date.jour);
+    if(currentDate > lastDate) distance += distances[i].distance;
+  }
+  return distance;
+}
+
+function updateMaxDistanceBetweenTwoRecharge(distance){
+  // update bdd
+}
+
+function getMaxDistanceBetweenTwoRecharge(){
+  // request bdd
+  return maxDistanceBetweenTwoRecharge;
+}

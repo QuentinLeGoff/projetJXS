@@ -15,7 +15,7 @@
 				
 	<div class="row-fluid">
 		<div class="row-fluid hideInIE8 circleStats">
-			<div class="span2" onTablet="span4" onDesktop="span2">
+			<div class="span3" onTablet="span4" onDesktop="span3">
 		    	<div class="circleStatsItemBox blue">
 					<div class="header">État de la batterie</div>
 					<span class="percent">%</span>
@@ -27,8 +27,26 @@
 					</div>
 		    	</div>
 			</div>
+
+			<div class="box span4">
+				<div class="box-header" data-original-title>
+					<h2><i class="halflings-icon white list"></i><span class="break"></span>All time records</h2>
+				</div>
+				<div class="box-content">
+					<div class="sparkLineStats" ontablet="span5" ondesktop="span4">
+	                    <ul class="unstyled">         
+	                    	<li><span class="glyphicons-icon dashboard"></span><span class="timeRecord">Vitesse maximum : <b>{{maxSpeed}}</b> km/h</span></li>
+							<li><span class="glyphicons-icon bicycle"></span><span class="timeRecord">Distance maximale : <b>{{maxDistance}}</b> km</span></li>
+						</ul>
+					</div>
+				</div>
+			</div><!--/span-->
+
+
+			
 		</div>
 
+		
 
 	</div>
 
