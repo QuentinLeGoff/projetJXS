@@ -21,8 +21,8 @@ webikeControllers.controller('HistoryController', ['$scope', '$http',
    
   }]);
 
-webikeControllers.controller('HomeController', ['$scope', '$http', 'BatteryLevelPolling', 'batteryLevel',
-  function ($scope, $http, BatteryLevelPolling, batteryLevel) {
+webikeControllers.controller('HomeController', ['$scope', '$http', 'BatteryLevelPolling', 'batteryLevel', 'weatherService',
+  function ($scope, $http, BatteryLevelPolling, batteryLevel, weatherService) {
     // Widget batterie
     $scope.autonomy = "80 min";
     
@@ -47,6 +47,10 @@ webikeControllers.controller('HomeController', ['$scope', '$http', 'BatteryLevel
           updateBatteryLevel(newValue);
       }
     );
+
+    // Widget méteo
+    $scope.dailyWeather = weatherService.getDailyWeather();
+
 
   }]);
 
@@ -86,6 +90,51 @@ webikeApp.factory('BatteryLevelPolling', ['batteryLevel', '$interval', function(
       }
   };
 }]);
+
+// WeatherService: Retourne la météo du jour et des 3 prochains jours
+webikeApp.factory('weatherService', ['$http', function($http) {
+    return { 
+      getDailyWeather: function() {
+        var dailyWeather = new Array();
+        $http.jsonp('http://api.openweathermap.org/data/2.5/forecast/daily?q=Rennes,fr&units=metric&cnt=4&APPID=18774ccf7e1356bf143885e7b0855166&callback=JSON_CALLBACK').success(function(data) {
+            if (data) {
+                if (data.list) {
+                    var today = moment();
+
+                    data.list.forEach(function(value){
+                      var weather = { date: "", temp: 0, temp_min: 0, temp_max: 0, wind: "", icon: "" }
+                      var date = moment(value.dt*1000).locale("fr");
+
+                      if ( today.startOf("day").isSame(date.startOf("day")) ){
+                        weather.date = "Aujourd'hui";
+                      } else {
+                        weather.date = date.format('dddd');
+                      }
+                      weather.temp = value.temp.day;
+                      weather.temp_min = value.temp.min;
+                      weather.temp_max = value.temp.max;
+                      weather.wind = value.speed;
+                      weather.icon = "http://openweathermap.org/img/w/" + value.weather[0].icon + ".png";
+                      dailyWeather.push(weather);
+                    });
+                }
+            }
+        });
+        return dailyWeather;
+      }
+    };
+  }]);
+
+// Filter temp : permet de tronquer les valeurs des températures
+webikeApp.filter('temp', function($filter) {
+    return function(input, precision) {
+        if (!precision) {
+            precision = 0;
+        }
+        var numberFilter = $filter('number');
+        return numberFilter(input, precision);
+    };
+});
 
 /* ----------------------------------- FUNCTIONS ----------------------------------- */
 

@@ -1013,7 +1013,7 @@ function sparkline_charts() {
 	
 	}
 	
-	if($(".boxchart")) {
+	/*if($(".boxchart")) {
 		
 		if (retina()) {
 			
@@ -1041,7 +1041,7 @@ function sparkline_charts() {
 			
 		}		
 		
-	}
+	}*/
 		
 }
 

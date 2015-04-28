@@ -15,6 +15,7 @@
 				
 	<div class="row-fluid">
 		<div class="row-fluid hideInIE8 circleStats">
+			<!-- Start: widget battery -->
 			<div class="span3" onTablet="span4" onDesktop="span3">
 		    	<div class="circleStatsItemBox blue">
 					<div class="header">État de la batterie</div>
@@ -27,7 +28,9 @@
 					</div>
 		    	</div>
 			</div>
+			<!-- end: widget battery -->
 
+			<!-- Start: widget records -->
 			<div class="box span4">
 				<div class="box-header" data-original-title>
 					<h2><i class="halflings-icon white list"></i><span class="break"></span>All time records</h2>
@@ -40,17 +43,48 @@
 						</ul>
 					</div>
 				</div>
-			</div><!--/span-->
-
-
-			
+			</div>
+			<!-- end: widget records -->
 		</div>
-
-		
-
 	</div>
 
 	<div class="row-fluid">
+		<!-- Start: widget météo -->
+		<h1> Ma météo </h1>
+		<div class="span3 statbox green" ontablet="span6" ondesktop="span3">
+			<div class="boxchart"><img src="{{dailyWeather[0].icon}}"></div>
+			<div class="number">{{dailyWeather[0].temp | temp:1}}°</div>
+			<div class="title">min: {{dailyWeather[0].temp_min | temp:1}}° - max: {{dailyWeather[0].temp_max | temp:1}}°</div>
+			<div class="footer">
+				<a href=""> {{dailyWeather[0].date}}</a>
+			</div>
+		</div>
+		<div class="span2 statbox green noMargin" ontablet="span6" ondesktop="span3">
+			<div class="boxchart"><img src="{{dailyWeather[1].icon}}"></div>
+			<div class="number min_number">{{dailyWeather[1].temp | temp}}°</div>
+			<div class="title min_title">min: {{dailyWeather[1].temp_min | temp}}° - max: {{dailyWeather[1].temp_max | temp}}°</div>
+			<div class="footer">
+				<a href=""> {{dailyWeather[1].date}}</a>
+			</div>
+		</div>
+		<div class="span2 statbox green noMargin" ontablet="span6" ondesktop="span3">
+			<div class="boxchart"><img src="{{dailyWeather[2].icon}}"></div>
+			<div class="number min_number">{{dailyWeather[2].temp | temp}}°</div>
+			<div class="title min_title">min: {{dailyWeather[2].temp_min | temp}}° - max: {{dailyWeather[2].temp_max | temp}}°</div>
+			<div class="footer">
+				<a href=""> {{dailyWeather[2].date}}</a>
+			</div>
+		</div>
+		<div class="span2 statbox green noMargin" ontablet="span6" ondesktop="span3">
+			<div class="boxchart"><img src="{{dailyWeather[3].icon}}"></div>
+			<div class="number min_number">{{dailyWeather[3].temp | temp}}°</div>
+			<div class="title min_title">min: {{dailyWeather[3].temp_min | temp}}° - max: {{dailyWeather[3].temp_max | temp}}°</div>
+			<div class="footer">
+				<a href=""> {{dailyWeather[3].date}}</a>
+			</div>
+		</div>
+
+
 		<div class="box black span4 noMargin" onTablet="span12" onDesktop="span4">
 			<div class="box-header">
 				<h2><i class="halflings-icon white check"></i><span class="break"></span>To Do List</h2>

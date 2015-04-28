@@ -6,3 +6,21 @@
 .timeRecord{
 	font-size:15px;
 }
+
+/* METEO */
+.number {
+	margin-top: 10px;
+	font-weight: bold;
+}
+
+.min_number {
+	font-size: 25px !important;
+}
+
+.title {
+	font-size: 13px;
+}
+
+.min_title {
+	font-size: 11px !important;
+}
