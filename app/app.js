@@ -95,7 +95,7 @@ webikeApp.controller('webikeController', ['$scope', '$http', '$location', 'Auth'
     // si batterie < 10% -> notif 
     // si batterie = 100% -> notif
     function notifications(val){
-      if(val < 50) {
+      if(val < 10) {
         var date = new Date();
         var date_text = date.getHours() + "h" + (date.getMinutes()<10 ? '0':'') + date.getMinutes();
         $scope.notifications.push({type: "alert", message:"Batterie presque déchargée !", date: date_text});
