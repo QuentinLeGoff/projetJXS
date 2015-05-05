@@ -30,6 +30,42 @@
 			</div>
 			<!-- end: widget battery -->
 
+			<!-- start: widget distance -->
+			<div class="box span4">
+				<div class="box-header">
+					<h2><i class="halflings-icon white white tasks"></i><span class="break"></span>Distances parcourues</h2>
+				</div>
+				<div class="box-content">
+					<table class="table table-striped">
+						<tr>
+							<td style="width:40%;">Cette semaine</td>
+							<td>
+								<div id="distanceWeek" class="progress progressAnimate blue"></div>
+								<div class="field_notice"><span class="progressAnimateValue"></span></div>
+							</td>
+						</tr>
+						<tr>
+							<td style="width:40%;">Ce mois</td>
+							<td>
+								<div id="distanceMonth" class="distanceMonth progress progressAnimate yellow"></div>
+								<div class="field_notice"><span class="must progressAnimateValue"></span></div>
+							</td>
+						</tr>
+						<tr>
+							<td style="width:40%;">Cette année</td>
+							<td>
+								<div id="distanceYear" class="distanceYear progress progressAnimate pink"></div>
+								<div class="field_notice"><span class="must progressAnimateValue"></span></div>
+							</td>
+						</tr>
+					</table>
+					<ul class="unstyled">         
+						<li><span class="timeRecord">Distance totale : <b>{{totaleDistance}}</b> km</span></li>
+					</ul>
+				</div>	
+			</div>
+			<!-- end: widget distance -->
+
 			<!-- Start: widget records -->
 			<div class="box span4">
 				<div class="box-header" data-original-title>
@@ -85,32 +121,7 @@
 		</div>
 
 
-		<div class="box black span4 noMargin" onTablet="span12" onDesktop="span4">
-			<div class="box-header">
-				<h2><i class="halflings-icon white check"></i><span class="break"></span>To Do List</h2>
-				<div class="box-icon">
-					<a href="#" class="btn-setting"><i class="halflings-icon white wrench"></i></a>
-					<a href="#" class="btn-minimize"><i class="halflings-icon white chevron-up"></i></a>
-					<a href="#" class="btn-close"><i class="halflings-icon white remove"></i></a>
-				</div>
-			</div>
-			<div class="box-content">
-				<div class="todo metro">
-					<ul class="todo-list">
-						<li class="red">
-							<a class="action icon-check-empty" href="#"></a>	
-							Aller chercher du pain  
-							<strong>today</strong>
-						</li>
-						<li class="red">
-							<a class="action icon-check-empty" href="#"></a>
-							Réparer les freins du vélos
-							<strong>today</strong>
-						</li>
-					</ul>
-				</div>	
-			</div>
-		</div>
+		
 		<div class="modal hide fade" id="myModal">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">×</button>
