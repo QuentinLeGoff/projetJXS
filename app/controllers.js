@@ -72,7 +72,7 @@ webikeControllers.controller('HomeController', ['$scope', '$http', 'BatteryLevel
 
 webikeControllers.controller('PerformancesController', ['$scope', '$http',
   function ($scope, $http) {
-   
+   function charts() {
   }]);
 
 /* ----------------------------------- FACTORY/SERVICES ----------------------------------- */
@@ -180,7 +180,6 @@ function updateBatteryLevel (value){
     }
   });
 };
-
 
 function updateDistance(period,value){
   var percent = (value * 100) / getTotaleDistance();

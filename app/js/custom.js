@@ -1571,8 +1571,8 @@ function charts() {
 		});
 		$(".graphControls input").click(function (e) {
 			e.preventDefault();
-			bars = $(this).val().indexOf("Bars") != -1;
-			lines = $(this).val().indexOf("Lines") != -1;
+			bars = $(this).val().indexOf("Barres") != -1;
+			lines = $(this).val().indexOf("Ligne") != -1;
 			steps = $(this).val().indexOf("steps") != -1;
 			plotWithOptions();
 		});
