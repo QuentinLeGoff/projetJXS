@@ -409,7 +409,7 @@ function template_functions(){
 	
 	/* ---------- Progress  ---------- */
 
-		$(".simpleProgress").progressbar({
+		/*$(".simpleProgress").progressbar({
 			value: 89
 		});
 
@@ -426,6 +426,8 @@ function template_functions(){
 			}
 		});
 
+
+
 		$(".progressUploadAnimate").progressbar({
 			value: 1,
 			create: function() {
@@ -440,7 +442,7 @@ function template_functions(){
 					} 
 				})
 			}
-		});
+		});*/
 		
 		if($(".taskProgress")) {
 		
@@ -470,11 +472,11 @@ function template_functions(){
 					
 					value: 1,
 					create: function() {
-						$(this).find(".ui-progressbar-value").animate({"width": endValue + "%"},{
+						$(this).find(".ui-progressbar-value").animate({"width": endValue + "km"},{
 							duration: 5000,
 							step: function(now){
 																
-								$(this).parent().parent().parent().find(".progressCustomValueVal").html(parseInt(now)+"%");
+								$(this).parent().parent().parent().find(".progressCustomValueVal").html(parseInt(now)+"km");
 							},
 							easing: "linear"
 						})

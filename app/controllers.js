@@ -48,6 +48,22 @@ webikeControllers.controller('HomeController', ['$scope', '$http', 'BatteryLevel
       }
     );
 
+    // Widget distances parcoures
+    $scope.totaleDistance = getTotaleDistance();
+
+    var weekDist = getDistance("week");
+    updateDistance("Week",weekDist);
+    console.log("Distance semaine :"+weekDist);
+
+    var monthDist = getDistance("month");
+    updateDistance("Month",monthDist);
+    console.log("Distance mois :"+monthDist);
+
+    var yearDist = getDistance("year");
+    updateDistance("Year",yearDist);
+    console.log("Distance année :"+yearDist);
+
+
     // Widget méteo
     $scope.dailyWeather = weatherService.getDailyWeather();
 
@@ -165,33 +181,20 @@ function updateBatteryLevel (value){
   });
 };
 
-function getMaxSpeed(){
-  var speed = distances[0].vitesse_max;
-  for(var i=1; i<distances.length;i++){
-    if(distances[i].vitesse_max > speed) speed = distances[i].vitesse_max;
-  }
-  return speed;
-}
 
-function getDistanceSinceLastRecharge(){
-  var distance = 0;
-
-  // Last Date recharge (request bdd)
-  var lastDate = new Date(lastDateRecharge.annee,lastDateRecharge.mois,lastDateRecharge.jour);
-
-
-  for(var i=0; i<distances.length;i++){
-    var currentDate = new Date(distances[i].date.annee,distances[i].date.mois,distances[i].date.jour);
-    if(currentDate > lastDate) distance += distances[i].distance;
-  }
-  return distance;
-}
-
-function updateMaxDistanceBetweenTwoRecharge(distance){
-  // update bdd
-}
-
-function getMaxDistanceBetweenTwoRecharge(){
-  // request bdd
-  return maxDistanceBetweenTwoRecharge;
+function updateDistance(period,value){
+  var percent = (value * 100) / getTotaleDistance();
+  var mult = getTotaleDistance()/100;
+  $("#distance"+period).progressbar({
+      value: 1,
+      create: function() {
+        $("#distance"+period).find(".ui-progressbar-value").animate({"width":percent+"%"},{
+          duration: 4000,
+          step: function(now){
+             $("#distance"+period).parent().find(".progressAnimateValue").html((now * mult).toFixed(0) +"km");
+          },
+          easing: "linear"
+        })
+      }
+    });
 }
