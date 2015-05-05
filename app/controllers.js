@@ -56,7 +56,7 @@ webikeControllers.controller('HomeController', ['$scope', '$http', 'BatteryLevel
 
 webikeControllers.controller('PerformancesController', ['$scope', '$http',
   function ($scope, $http) {
-   
+   function charts() {
   }]);
 
 /* ----------------------------------- FACTORY/SERVICES ----------------------------------- */
@@ -170,8 +170,8 @@ function getMaxSpeed(){
   for(var i=1; i<distances.length;i++){
     if(distances[i].vitesse_max > speed) speed = distances[i].vitesse_max;
   }
-  return speed;
-}
+  return speed
+;}
 
 function getDistanceSinceLastRecharge(){
   var distance = 0;

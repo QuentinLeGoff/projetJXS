@@ -1,0 +1,41 @@
+format de données JSON
+
+utilisateur
+
+{
+	"login":
+	"mdp":	
+	"nom":
+	"prénom":
+	"sexe":
+	"age":
+	"poids":
+	"adresse@":
+	"lieu":
+}
+
+batterie
+
+{
+	
+	"charge":bool
+	"niveau":
+	"derniereRecharge":
+}
+
+itinéraire
+
+{
+
+	"date" : ,
+	"depart" : { "lat" : 68.366560, "long" : 58.66987455, "text" : "8 rue machin, 35000 Rennnes"},
+	"arrivee" : { "lat" : 68.88996, "long" : 59.788566, "text" : "20 rue truc, 35000 Cesson"},
+	"distance" : 20.1,
+	"duree" : { "h" : 0, "m" : 31, "s" : 23},
+	"vitesse_moy" : 2.3,
+	"vitesse_max" : 2.8,
+	"calories" : 860,
+	"altitude_min" : 750,
+	"altitude_max" : 980 
+
+}
