@@ -40,6 +40,7 @@ webikeApp.config(['$routeProvider','$locationProvider',
 // Main controller
 webikeApp.controller('webikeController', ['$scope', '$http', '$location', 'Auth', 'batteryLevel',
   function ($scope, $http, $location, Auth, batteryLevel) {
+    var first_notif = true;
     $scope.user = {firstName : "Soren", lastName : "Bjerg"};
     $scope.notifications = [];
     $scope.notification_message = "Pas de notifications";
@@ -95,12 +96,15 @@ webikeApp.controller('webikeController', ['$scope', '$http', '$location', 'Auth'
     // si batterie < 10% -> notif 
     // si batterie = 100% -> notif
     function notifications(val){
-      if(val < 10) {
+      if(val <= 10 && first_notif) {
+        first_notif = false;
         var date = new Date();
         var date_text = date.getHours() + "h" + (date.getMinutes()<10 ? '0':'') + date.getMinutes();
         $scope.notifications.push({type: "alert", message:"Batterie presque déchargée !", date: date_text});
         $scope.notification_count++;
         majNotificationText();
+      }else if( val > 10 && val < 100){
+        first_notif = true;
       }else if(val == 100){
         var date = new Date();
         var date_text = date.getHours() + "h" + (date.getMinutes()<10 ? '0':'') + date.getMinutes();
