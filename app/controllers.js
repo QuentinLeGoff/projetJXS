@@ -58,6 +58,11 @@ webikeControllers.controller('PerformancesController', ['$scope', '$http',
   function ($scope, $http) {
    
   }]);
+  
+webikeControllers.controller('ProfileController', ['$scope', '$http',
+  function ($scope, $http) {
+   $scope.user = {name: "monnom", firstname: "monprénom", email: "truc@mail.com"};
+  }]);
 
 /* ----------------------------------- FACTORY/SERVICES ----------------------------------- */
 // BatteryLevel

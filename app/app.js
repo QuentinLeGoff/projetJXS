@@ -30,6 +30,11 @@ webikeApp.config(['$routeProvider','$locationProvider',
       templateUrl: 'template/performances.html',
       controller: 'PerformancesController'
     })
+    .when('/profile', {
+      title: "Mon profil | WeBike",
+      templateUrl: 'template/profile.html',
+      controller: 'ProfileController'
+    })
     .otherwise({
       redirectTo: '/'
     });
@@ -195,3 +200,22 @@ webikeApp.factory('Auth', ['$http', '$cookieStore', '$rootScope',
 
     return service;
   }]);
+  
+/* ----------------------------------- API ----------------------------------- */
+
+  webikeApp.factory('WebikeAPI', ['$resource', function($resource) {
+      return $resource('http://148.60.11.177:3000/:url', {url:'@url'});
+  }]);
+  
+  // TODO
+   /*webikeApp.factory('UserDB', ['WebikeAPI', function(WebikeAPI) {
+      return {
+        getUser: function (){
+          var user = WebikeAPI.get({url:'battery/'},function(){
+            
+          }
+
+          return user;
+        }
+      };
+  }]);*/

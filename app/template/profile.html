@@ -1,0 +1,22 @@
+<!-- start: Main Menu -->
+<div ng-include src="'template/sidebar.html'"></div>
+<!-- end: Main Menu -->
+
+<!-- start: Content -->
+<div id="content" class="span10">
+	<ul class="breadcrumb">
+		<li>
+			<i class="icon-home"></i>
+			<a href="#/">Home</a> 
+			<i class="icon-angle-right"></i>
+		</li>
+		<li><a href="#/profile">Mon profil</a></li>
+	</ul>
+
+	<div class="row-fluid">
+		<p><span class="label_profile">Nom -</span> {{user.name}}</p>
+		<p><span class="label_profile">Prénom -</span> {{user.firstname}}</p>
+		<p><span class="label_profile">Adresse email -</span> {{user.email}}</p>
+	</div>
+</div>
+<!-- end: Content -->

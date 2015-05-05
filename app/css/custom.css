@@ -24,3 +24,10 @@
 .min_title {
 	font-size: 11px !important;
 }
+
+/* PROFILE */
+.label_profile {
+	font-size: 16px;
+	line-height: 16px;
+	font-weight: bold;
+}
