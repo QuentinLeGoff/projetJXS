@@ -72,7 +72,6 @@ webikeControllers.controller('HomeController', ['$scope', '$http', 'BatteryLevel
 
 webikeControllers.controller('PerformancesController', ['$scope', '$http',
   function ($scope, $http) {
-   function charts() {
   }]);
   
 webikeControllers.controller('ProfileController', ['$scope', '$http',
