@@ -17,6 +17,20 @@
 		<!-- start: Widgets of History -->
 		<div class="span7">
 			<h1>Historique des trajets</h1>
+			<div class="priority low"><span>07 Mai 2015</span></div>
+
+			<div class="task low">
+				<div class="desc">
+					<div class="title">8 rue machin, Rennnes - 20 rue truc, Cesson</div>
+					<div>Durée: 35 mins</div>
+				</div>
+				<div class="time">
+					<div class="date">12 KM</div>
+					<!--<div> 1 day</div>-->
+				</div>
+			</div>
+
+
 			<div class="priority low"><span>14 Avril 2015</span></div>
 
 			<div class="task low">
@@ -52,11 +66,23 @@
 			</div>
 		</div>
 
-		<div class="span5">
-		<div class="dark">
-		<h1>Destinations</h1>
-			
-		</div>
+		<div class="span5 noMarginLeft">
+			<div class="dark">
+				<h1>Information sur le trajet</h1>
+				<br/>
+				<div class="hist_depart"><p><i class="icon-map-marker"></i> 8 rue machin, Rennnes - 20 rue truc, Cesson</p></div>
+
+				<p><i class="icon-trophy"></i> Vitesse max : 29 km/h</p>
+				<p><i class="icon-signal"></i> Vitesse moyenne : 20 km/h</p>
+				<p>Calories brulées : 850</p>
+				<p>Altitude max : 762 m</p>
+				<p>Altitude min : 453 m</p>
+				<ui-gmap-google-map center='map.center' zoom='map.zoom'>
+					<ui-gmap-markers models="markers" idkey="markers.id" coords="'coords'"></ui-gmap-markers>
+    			</ui-gmap-google-map>
+
+
+			</div>
 		</div>
 		<!-- end: Widgets of History -->
 	</div>

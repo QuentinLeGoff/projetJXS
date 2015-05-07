@@ -1,7 +1,8 @@
 var webikeApp = angular.module('webikeApp', [
   'ngRoute',
   'ngCookies',
-  'webikeControllers'
+  'webikeControllers',
+  'uiGmapgoogle-maps'
   ]);
 
 webikeApp.config(['$routeProvider','$locationProvider',

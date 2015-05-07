@@ -18,7 +18,21 @@ webikeControllers.controller('LoginController', ['$scope', '$location', 'Auth',
 
 webikeControllers.controller('HistoryController', ['$scope', '$http',
   function ($scope, $http) {
-   
+    $scope.map = { center: { latitude: 48.113549, longitude: -1.637564 }, zoom: 13 };
+    $scope.markers = [{
+        id: 0,
+        coords: {
+            latitude: 48.117408,
+            longitude: -1.651672
+        },
+        }, {
+        id: 1,
+        coords: {
+            latitude: 48.119028,
+            longitude: -1.601129
+        },
+    }];
+
   }]);
 
 webikeControllers.controller('HomeController', ['$scope', '$http', 'BatteryLevelPolling', 'batteryLevel', 'weatherService',
@@ -28,6 +42,13 @@ webikeControllers.controller('HomeController', ['$scope', '$http', 'BatteryLevel
     
     // start polling
     BatteryLevelPolling.startPolling();
+
+    // updateBatteryLevel
+    $scope.$watch(function(scope) { return batteryLevel.level; },
+      function(newValue, oldValue) {
+          updateBatteryLevel(newValue);
+      }
+    );
 
     // Widget All Time Record
     $scope.maxSpeed = getMaxSpeed();
@@ -41,27 +62,17 @@ webikeControllers.controller('HomeController', ['$scope', '$http', 'BatteryLevel
       $scope.maxDistance = maxDistance.toFixed(1);
     }
 
-    // updateBatteryLevel
-    $scope.$watch(function(scope) { return batteryLevel.level; },
-      function(newValue, oldValue) {
-          updateBatteryLevel(newValue);
-      }
-    );
-
     // Widget distances parcoures
     $scope.totaleDistance = getTotaleDistance();
 
     var weekDist = getDistance("week");
     updateDistance("Week",weekDist);
-    console.log("Distance semaine :"+weekDist);
 
     var monthDist = getDistance("month");
     updateDistance("Month",monthDist);
-    console.log("Distance mois :"+monthDist);
 
     var yearDist = getDistance("year");
     updateDistance("Year",yearDist);
-    console.log("Distance année :"+yearDist);
 
 
     // Widget méteo
