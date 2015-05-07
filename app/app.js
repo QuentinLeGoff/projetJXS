@@ -43,10 +43,16 @@ webikeApp.config(['$routeProvider','$locationProvider',
 
 
 // Main controller
-webikeApp.controller('webikeController', ['$scope', '$http', '$location', 'Auth', 'batteryLevel',
-  function ($scope, $http, $location, Auth, batteryLevel) {
+webikeApp.controller('webikeController', ['$scope', '$http', '$location', 'Auth', 'batteryLevel', '$cookieStore',
+  function ($scope, $http, $location, Auth, batteryLevel, $cookieStore) {
     var first_notif = true;
-    $scope.user = {firstName : "Soren", lastName : "Bjerg"};
+
+    // set firstname & lastname
+    var cookies = $cookieStore.get('globals') || {};
+    if( cookies.currentUser ){
+      $scope.user = {firstName: cookies.currentUser.userdata.firstname, lastName: cookies.currentUser.userdata.lastname};
+    }
+
     $scope.notifications = [];
     $scope.notification_message = "Pas de notifications";
     $scope.notification_count = 0;
@@ -154,30 +160,40 @@ webikeApp.run(['$location', '$rootScope', '$cookieStore', '$http', 'BatteryLevel
 
 
 // Service d'authentification
-webikeApp.factory('Auth', ['$http', '$cookieStore', '$rootScope', 
-  function ($http, $cookieStore, $rootScope){
+webikeApp.factory('Auth', ['$http', '$cookieStore', '$rootScope', 'UserAPI',
+  function ($http, $cookieStore, $rootScope, UserAPI){
     var service = {};
 
     // Authentification via l'API
     service.Login = function (username, password, callback){
-      var response = {};
+      
+      var handleResponse = function (data, status){
+        var response = {};
 
-      /* TODO */
-      if(username === "test" && password === "test"){
-        response = {success : true};
-      }else{
-        response = {success : false, message : "Nom d'utilisateur / mot de passe incorect"};
-      }
+        if( data == null || data.username != username) {
+          response = {success: false, message: "Nom d'utilisateur incorect"};
+        }else if( password != data.password){
+          response = {success: false, message: "Mot de passe incorect"};
+        }else{
+          response = {success: true, userdata: data};
+          $rootScope.user = {firstName : data.firstname, lastName : data.lastname};
 
-      callback(response);
+        }
+
+        callback(response);
+      };
+
+      //API CALL
+      UserAPI.getUser(username).success(handleResponse);
+
     };
 
     // Crée un cookie globals
-    service.SetCookie = function (username, password){
+    service.SetCookie = function (userdata, password){
       var authdata = window.btoa(password);
       $rootScope.globals = {
         currentUser: {
-          username: username,
+          userdata: userdata,
           authdata: authdata
         }
       };
@@ -202,20 +218,12 @@ webikeApp.factory('Auth', ['$http', '$cookieStore', '$rootScope',
   }]);
   
 /* ----------------------------------- API ----------------------------------- */
+  var IP_SERVER = "http://148.60.11.177:3000/";
 
-  webikeApp.factory('WebikeAPI', ['$resource', function($resource) {
-      return $resource('http://148.60.11.177:3000/:url', {url:'@url'});
-  }]);
-  
-  // TODO
-   /*webikeApp.factory('UserDB', ['WebikeAPI', function(WebikeAPI) {
-      return {
-        getUser: function (){
-          var user = WebikeAPI.get({url:'battery/'},function(){
-            
-          }
-
-          return user;
+  webikeApp.factory('UserAPI', ['$http', function ($http){
+    return {
+        getUser: function (username){
+          return $http.get(IP_SERVER + "users/" + username);
         }
-      };
-  }]);*/
+    };
+  }]);

@@ -7,7 +7,7 @@ webikeControllers.controller('LoginController', ['$scope', '$location', 'Auth',
 	  	$scope.login = function(){
 	  		Auth.Login($scope.username, $scope.password, function(response) {
                 if(response.success) {
-                    Auth.SetCookie($scope.username, $scope.password);
+                    Auth.SetCookie(response.userdata, $scope.password);
                     $location.path("/");
                 } else {
                     $scope.error = response.message;
