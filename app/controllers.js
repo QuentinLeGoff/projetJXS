@@ -74,9 +74,16 @@ webikeControllers.controller('PerformancesController', ['$scope', '$http',
   function ($scope, $http) {
   }]);
   
-webikeControllers.controller('ProfileController', ['$scope', '$http',
-  function ($scope, $http) {
-   $scope.user = {name: "monnom", firstname: "monprénom", email: "truc@mail.com"};
+// Profile controller
+webikeControllers.controller('ProfileController', ['$scope', '$http','$cookieStore',
+  function ($scope, $http, $cookieStore) {
+
+    var cookies = $cookieStore.get('globals') || {};
+    if( cookies.currentUser ){
+      var data = cookies.currentUser.userdata;
+      $scope.user = {firstname: data.firstname, lastname: data.lastname, email: data.email, location: data.location};
+    }
+
   }]);
 
 /* ----------------------------------- FACTORY/SERVICES ----------------------------------- */
