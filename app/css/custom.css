@@ -1,3 +1,8 @@
+/* INDEX - HOME */
+.logo {
+	height: 45px;
+	padding-top: 4px;
+}
 .nav-tabs>.active>a:focus{
 	color: #fff;
   	background-color: inherit;
@@ -33,8 +38,21 @@
 }
 
 /* History */
-.hist_depart, .hist_arrivee {
+.itinerary {
+	cursor: pointer;
+}
+.it_selected {
+	background-color: rgba(153, 144, 144, 0.43);
+}
+
+.hist {
 	font-size: 16px;
 }
 
-.angular-google-map-container { height: 400px; }
+.angular-google-map-container { 
+	height: 400px; 
+	width: auto;
+	vertical-align: middle;
+	border: 0;
+	display: block;
+}

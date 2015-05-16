@@ -16,30 +16,59 @@ webikeControllers.controller('LoginController', ['$scope', '$location', 'Auth',
   		};
   }]);
 
-webikeControllers.controller('HistoryController', ['$scope', '$http',
-  function ($scope, $http) {
-    $scope.map = { center: { latitude: 48.113549, longitude: -1.637564 }, zoom: 13 };
-    $scope.markers = [{
+webikeControllers.controller('HistoryController', ['$scope', '$http', 'uiGmapGoogleMapApi',
+  function ($scope, $http, uiGmapGoogleMapApi) {
+    $scope.itineraries = distances;
+    $scope.itinerary = {};
+
+    $scope.selectedIndex = -1; // Whatever the default selected index is, use -1 for no selection
+
+    $scope.itinerarySelected = function ($index) {
+      $scope.selectedIndex = $index;
+      
+      $scope.itinerary = {
+        date : distances[$index].date.jour + "/" + distances[$index].date.mois + "/" + distances[$index].date.annee + " - " + distances[$index].date.h + "h" + distances[$index].date.m,
+        depart: distances[$index].depart.text, 
+        arrivee: distances[$index].arrivee.text, 
+        vitesse_max: distances[$index].vitesse_max, 
+        vitesse_moy: distances[$index].vitesse_moy, 
+        calories: distances[$index].calories, 
+        alt_max: distances[$index].altitude_max, 
+        alt_min: distances[$index].altitude_min
+      };
+      var dep_lat = distances[$index].depart.lat;
+      var dep_long = distances[$index].depart.long;
+      var arr_lat = distances[$index].arrivee.lat;
+      var arr_long = distances[$index].arrivee.long;
+
+      var cent_lat = (dep_lat + arr_lat)/2;
+      var cent_long = (dep_long + arr_long)/2;
+
+
+      $scope.map = { center: { latitude: cent_lat, longitude: cent_long }, zoom: 13 };
+      $scope.markers = [{
         id: 0,
         coords: {
-            latitude: 48.117408,
-            longitude: -1.651672
+            latitude: dep_lat,
+            longitude: dep_long
         },
+        icon: "img/green-dot.png"
         }, {
         id: 1,
         coords: {
-            latitude: 48.119028,
-            longitude: -1.601129
+            latitude: arr_lat,
+            longitude: arr_long
         },
-    }];
+        icon: "img/red-dot.png"
+      }];
+
+    };
 
   }]);
 
 webikeControllers.controller('HomeController', ['$scope', '$http', 'BatteryLevelPolling', 'batteryLevel', 'weatherService',
   function ($scope, $http, BatteryLevelPolling, batteryLevel, weatherService) {
-    // Widget batterie
-    $scope.autonomy = "80 min";
-    
+   
     // start polling
     BatteryLevelPolling.startPolling();
 
@@ -47,6 +76,12 @@ webikeControllers.controller('HomeController', ['$scope', '$http', 'BatteryLevel
     $scope.$watch(function(scope) { return batteryLevel.level; },
       function(newValue, oldValue) {
           updateBatteryLevel(newValue);
+      }
+    );
+
+    $scope.$watch(function(scope) { return batteryLevel.autonomy; },
+      function(newValue, oldValue) {
+           $scope.autonomy = newValue + " km";
       }
     );
 
@@ -81,10 +116,14 @@ webikeControllers.controller('HomeController', ['$scope', '$http', 'BatteryLevel
 
   }]);
 
+
+// Performance controller
 webikeControllers.controller('PerformancesController', ['$scope', '$http',
   function ($scope, $http) {
+
   }]);
   
+
 // Profile controller
 webikeControllers.controller('ProfileController', ['$scope', '$http','$cookieStore',
   function ($scope, $http, $cookieStore) {
@@ -97,25 +136,51 @@ webikeControllers.controller('ProfileController', ['$scope', '$http','$cookieSto
 
   }]);
 
+
+// Console controller
+webikeControllers.controller('ConsoleController', ['$scope', '$http', 'BatterieAPI',
+  function ($scope, $http, BatterieAPI) {
+
+    $scope.updateLevelBattery = function (level){
+      if( !isNaN(level) && level >= 0 && level <= 100 ){
+        BatterieAPI.updateLevelBatterie(level).success(function(){}); //API CALL
+      }
+    }
+
+    $scope.updateDistanceMax = function (dist){
+      if( !isNaN(dist) && dist >= 0){
+        console.log("distancemax :" + dist);
+        BatterieAPI.updateDistanceMax(dist).success(function(){}); //API CALL
+      }
+    }
+
+  }]);
+
 /* ----------------------------------- FACTORY/SERVICES ----------------------------------- */
 // BatteryLevel
 webikeApp.factory('batteryLevel',function () {
-  return { level : 50 };
+  return { level : 50, autonomy: 0};
 });
 
 // BatteryLevelPolling : Récupère le niveau de la batterie toutes les x secondes
-webikeApp.factory('BatteryLevelPolling', ['batteryLevel', '$interval', function(batteryLevel,$interval){
+webikeApp.factory('BatteryLevelPolling', ['batteryLevel', '$interval', 'BatterieAPI',  function (batteryLevel, $interval, BatterieAPI){
   var pollingTime = 3000;
   var polls = {};
   var calls = 0;
 
+  /* handle response sucess getBatterie */
+  var handleResponse = function (data, status){
+      var level =  data[0].level;
+      batteryLevel.level = level;
+      batteryLevel.autonomy = (60 * level)/100;  
+      if(calls == 0) initBatteryLevel(level);
+      calls++;
+  }
+
   return {
       startPolling: function() {                
           var poller = function() {
-            var level = Math.floor((Math.random() * 100)); // TODO
-            if(calls == 0) initBatteryLevel(level);
-            batteryLevel.level = level;
-            calls++;
+            BatterieAPI.getBatterie().success(handleResponse); // API CALL
           }
           poller();
           polls = $interval(poller, pollingTime);
@@ -174,6 +239,14 @@ webikeApp.filter('temp', function($filter) {
     };
 });
 
+webikeApp.filter('monthName', [function() {
+    return function (monthNumber) { //1 = January
+        var monthNames = [ 'Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin',
+            'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre' ];
+        return monthNames[monthNumber - 1];
+    }
+}]);
+
 /* ----------------------------------- FUNCTIONS ----------------------------------- */
 
 function initBatteryLevel (value){
@@ -207,12 +280,12 @@ function updateDistance(period,value){
   var percent = (value * 100) / getTotaleDistance();
   var mult = getTotaleDistance()/100;
   $("#distance"+period).progressbar({
-      value: 1,
+      value: 0.1,
       create: function() {
         $("#distance"+period).find(".ui-progressbar-value").animate({"width":percent+"%"},{
           duration: 4000,
           step: function(now){
-             $("#distance"+period).parent().find(".progressAnimateValue").html((now * mult).toFixed(0) +"km");
+             $("#distance"+period).parent().find(".progressAnimateValue").html((now * mult).toFixed(1) +"km");
           },
           easing: "linear"
         })

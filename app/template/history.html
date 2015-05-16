@@ -17,71 +17,40 @@
 		<!-- start: Widgets of History -->
 		<div class="span7">
 			<h1>Historique des trajets</h1>
-			<div class="priority low"><span>07 Mai 2015</span></div>
+			<div ng-repeat="it in itineraries">
+				<div class="priority low" ng-if="it.date.jour != itineraries[$index - 1].date.jour || it.date.mois != itineraries[$index - 1].date.mois || it.date.annee != itineraries[$index - 1].date.annee"><span>{{it.date.jour}} {{it.date.mois | monthName}} {{it.date.annee}}</span></div>
 
-			<div class="task low">
-				<div class="desc">
-					<div class="title">8 rue machin, Rennnes - 20 rue truc, Cesson</div>
-					<div>Durée: 35 mins</div>
-				</div>
-				<div class="time">
-					<div class="date">12 KM</div>
-					<!--<div> 1 day</div>-->
-				</div>
-			</div>
-
-
-			<div class="priority low"><span>14 Avril 2015</span></div>
-
-			<div class="task low">
-				<div class="desc">
-					<div class="title">République - ESIR</div>
-					<div>Durée: 35 mins</div>
-				</div>
-				<div class="time">
-					<div class="date">12 KM</div>
-					<!--<div> 1 day</div>-->
-				</div>
-			</div>
-			<div class="task low">
-				<div class="desc">
-					<div class="title">ESIR - MacDonald</div>
-					<div>Durée: 10 mins</div>
-				</div>
-				<div class="time">
-					<div class="date">5 KM</div>
-					<!--<div> 1 day</div>-->
-				</div>
-			</div>
-			<div class="priority low"><span>10 Avril 2015</span></div>
-			<div class="task low">
-				<div class="desc">
-					<div class="title">MacDonald - Diapason Beaulieu</div>
-					<div>Durée: 20 mins</div>
-				</div>
-				<div class="time">
-					<div class="date">8 KM</div>
-					<!--<div> 1 day</div>-->
+				<div class="task low itinerary" ng-class="{ 'it_selected': $index == selectedIndex }" ng-click="itinerarySelected($index)">
+					<div class="desc">
+						<div class="title">{{it.depart.text}} - {{it.arrivee.text}}</div>
+						<div>Durée: {{it.duree.m}} mins</div>
+					</div>
+					<div class="time">
+						<div class="date">{{it.distance}} KM</div>
+					</div>
 				</div>
 			</div>
 		</div>
 
 		<div class="span5 noMarginLeft">
-			<div class="dark">
+			<div class="dark" ng-hide="selectedIndex == -1">
 				<h1>Information sur le trajet</h1>
 				<br/>
-				<div class="hist_depart"><p><i class="icon-map-marker"></i> 8 rue machin, Rennnes - 20 rue truc, Cesson</p></div>
+				<div class="hist">
+					<p><i class="icon-map-marker" style="color:green"></i> {{itinerary.depart}}</p>
+					<p><i class="icon-map-marker" style="color:red"></i> {{itinerary.arrivee}}</p>
+					<p>{{itinerary.date}}</p>
 
-				<p><i class="icon-trophy"></i> Vitesse max : 29 km/h</p>
-				<p><i class="icon-signal"></i> Vitesse moyenne : 20 km/h</p>
-				<p>Calories brulées : 850</p>
-				<p>Altitude max : 762 m</p>
-				<p>Altitude min : 453 m</p>
-				<ui-gmap-google-map center='map.center' zoom='map.zoom'>
-					<ui-gmap-markers models="markers" idkey="markers.id" coords="'coords'"></ui-gmap-markers>
+				</div>
+				<br>
+				<p><i class="icon-trophy"></i> Vitesse max : {{itinerary.vitesse_max}} km/h</p>
+				<p>Vitesse moyenne : {{itinerary.vitesse_moy}} km/h</p>
+				<p>Calories brulées : {{itinerary.calories}}</p>
+				<p><i class="icon-trophy"></i> Altitude max : {{itinerary.alt_max}} m</p>
+				<p>Altitude min : {{itinerary.alt_min}} m</p>
+				<ui-gmap-google-map ng-hide="selectedIndex == -1" center='map.center' zoom='map.zoom'>
+					<ui-gmap-markers models="markers" idkey="markers.id" coords="'coords'" bounds="'bounds'" icon="'icon'"></ui-gmap-markers>
     			</ui-gmap-google-map>
-
-
 			</div>
 		</div>
 		<!-- end: Widgets of History -->
