@@ -1,0 +1,53 @@
+<!-- start: Main Menu -->
+<div ng-include src="'template/sidebar.html'"></div>
+<!-- end: Main Menu -->
+
+<!-- start: Content -->
+<div id="content" class="span10">
+	<ul class="breadcrumb">
+		<li>
+			<i class="icon-home"></i>
+			<a href="#/">Home</a> 
+			<i class="icon-angle-right"></i>
+		</li>
+		<li><a href="#/console">Console</a></li>
+	</ul>
+
+	<div class="row-fluid">
+		<div class="box span4">
+			<div class="box-content">
+				<form class="form-horizontal">
+					<fieldset>
+						<div class="control-group">
+							<label class="control-label" for="focusedInput">Niveau de la batterie</label>
+							<div class="controls">
+								<input class="input-small focused" id="focusedInput" type="text" ng-model="level_battery">
+							</div>
+						</div>
+					</fieldset>
+					<div class="form-actions">
+						<button type="submit" ng-click="updateLevelBattery(level_battery)" class="btn btn-primary">Mettre à jour</button>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="box span4">
+			<div class="box-content">
+				<form class="form-horizontal">
+					<fieldset>
+						<div class="control-group">
+							<label class="control-label" for="focusedInput">Distance max</label>
+							<div class="controls">
+								<input class="input-small focused" id="focusedInput" type="text" ng-model="dist_max">
+							</div>
+						</div>
+					</fieldset>
+					<div class="form-actions">
+						<button type="submit" ng-click="updateDistanceMax(dist_max)" class="btn btn-primary">Mettre à jour</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- end: Content -->

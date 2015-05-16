@@ -5,10 +5,14 @@ var webikeApp = angular.module('webikeApp', [
   'uiGmapgoogle-maps'
   ]);
 
-webikeApp.config(['$routeProvider','$locationProvider',
-  function ($routeProvider,$locationProvider) {
+webikeApp.config(['$routeProvider','$locationProvider','$httpProvider',
+  function ($routeProvider,$locationProvider,$httpProvider) {
 
-    //$locationProvider.html5Mode(true);
+    //$locationProvider.html5Mode(true);        
+    $httpProvider.defaults.headers.common['Access-Control-Allow-Headers'] = "*";
+    $httpProvider.defaults.useXDomain = true;
+    $httpProvider.defaults.withCredentials = false;
+    delete $httpProvider.defaults.headers.common['X-Requested-With'];
 
     $routeProvider
     .when('/', {
@@ -35,6 +39,11 @@ webikeApp.config(['$routeProvider','$locationProvider',
       title: "Mon profil | WeBike",
       templateUrl: 'template/profile.html',
       controller: 'ProfileController'
+    })
+    .when('/console', {
+      title: "Console | WeBike",
+      templateUrl: 'template/console.html',
+      controller: 'ConsoleController'
     })
     .otherwise({
       redirectTo: '/'
@@ -225,6 +234,20 @@ webikeApp.factory('Auth', ['$http', '$cookieStore', '$rootScope', 'UserAPI',
     return {
         getUser: function (username){
           return $http.get(IP_SERVER + "users/" + username);
+        }
+    };
+  }]);
+
+  webikeApp.factory('BatterieAPI', ['$http', function ($http){
+    return {
+        getBatterie: function (){
+          return $http.get(IP_SERVER + "batterie");
+        },
+        updateLevelBatterie: function (value){
+          return $http.put(IP_SERVER + "batterie/update_level/" + value);
+        },
+        updateDistanceMax: function (value){
+          return $http.put(IP_SERVER + "batterie/update_distancemax/" + value);
         }
     };
   }]);
