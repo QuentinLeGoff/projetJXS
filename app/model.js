@@ -6,11 +6,11 @@ function getMaxSpeed(){
   return speed;
 }
 
-function getDistanceSinceLastRecharge(){
+function getDistanceSinceLastRecharge(dateLastRecharge){
   var distance = 0;
 
   // Last Date recharge (request bdd)
-  var lastDate = new Date(lastDateRecharge.annee,lastDateRecharge.mois,lastDateRecharge.jour);
+  var lastDate = new Date(dateLastRecharge.annee,dateLastRecharge.mois,dateLastRecharge.jour);
 
 
   for(var i=0; i<distances.length;i++){

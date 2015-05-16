@@ -89,8 +89,10 @@ webikeControllers.controller('HomeController', ['$scope', '$http', 'BatteryLevel
     $scope.maxSpeed = getMaxSpeed();
 
     var handleResponse =  function (data, status){
-      var distance = getDistanceSinceLastRecharge();
+      var dateLastRecharge = {jour: data[0].lastRecharge.day , mois: data[0].lastRecharge.month, annee: data[0].lastRecharge.year }
+      var distance = getDistanceSinceLastRecharge(dateLastRecharge);
       var maxDistance = data[0].maxDistanceBetweenRecharge;
+      
       if(distance > maxDistance){
         $scope.maxDistance = distance.toFixed(1);
         updateMaxDistanceBetweenTwoRecharge(distance);
@@ -167,7 +169,7 @@ webikeApp.factory('batteryLevel',function () {
 
 // BatteryLevelPolling : Récupère le niveau de la batterie toutes les x secondes
 webikeApp.factory('BatteryLevelPolling', ['batteryLevel', '$interval', 'BatterieAPI',  function (batteryLevel, $interval, BatterieAPI){
-  var pollingTime = 3000;
+  var pollingTime = 3500;
   var polls = {};
   var calls = 0;
 

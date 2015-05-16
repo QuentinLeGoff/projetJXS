@@ -1,11 +1,3 @@
-var lastDateRecharge = {
-					"jour" : 10,
-					"mois" : 08,
-					"annee" : 2014
-				};
-
-var maxDistanceBetweenTwoRecharge = 20;
-
 var distances = [{
 					"id" : "0001",
 					"date" : { "jour" : 09, "mois" : 05, "annee" : 2015, "h": 9, "m" : 33},
