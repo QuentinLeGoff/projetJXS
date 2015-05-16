@@ -66,8 +66,8 @@ webikeControllers.controller('HistoryController', ['$scope', '$http', 'uiGmapGoo
 
   }]);
 
-webikeControllers.controller('HomeController', ['$scope', '$http', 'BatteryLevelPolling', 'batteryLevel', 'weatherService',
-  function ($scope, $http, BatteryLevelPolling, batteryLevel, weatherService) {
+webikeControllers.controller('HomeController', ['$scope', '$http', 'BatteryLevelPolling', 'batteryLevel', 'weatherService', 'BatterieAPI',
+  function ($scope, $http, BatteryLevelPolling, batteryLevel, weatherService, BatterieAPI) {
    
     // start polling
     BatteryLevelPolling.startPolling();
@@ -88,27 +88,30 @@ webikeControllers.controller('HomeController', ['$scope', '$http', 'BatteryLevel
     // Widget All Time Record
     $scope.maxSpeed = getMaxSpeed();
 
-    var distance = getDistanceSinceLastRecharge();
-    var maxDistance = getMaxDistanceBetweenTwoRecharge();
-    if(distance > maxDistance){
-      $scope.maxDistance = distance.toFixed(1);
-      updateMaxDistanceBetweenTwoRecharge(distance);
-    }else{
-      $scope.maxDistance = maxDistance.toFixed(1);
+    var handleResponse =  function (data, status){
+      var distance = getDistanceSinceLastRecharge();
+      var maxDistance = data[0].maxDistanceBetweenRecharge;
+      if(distance > maxDistance){
+        $scope.maxDistance = distance.toFixed(1);
+        updateMaxDistanceBetweenTwoRecharge(distance);
+      }else{
+        $scope.maxDistance = maxDistance.toFixed(1);
+      }
+
+      // Widget distances parcoures
+      $scope.totaleDistance = getTotaleDistance();
+
+      var weekDist = getDistance("week");
+      updateDistance("Week",weekDist);
+
+      var monthDist = getDistance("month");
+      updateDistance("Month",monthDist);
+
+      var yearDist = getDistance("year");
+      updateDistance("Year",yearDist);
     }
 
-    // Widget distances parcoures
-    $scope.totaleDistance = getTotaleDistance();
-
-    var weekDist = getDistance("week");
-    updateDistance("Week",weekDist);
-
-    var monthDist = getDistance("month");
-    updateDistance("Month",monthDist);
-
-    var yearDist = getDistance("year");
-    updateDistance("Year",yearDist);
-
+    BatterieAPI.getBatterie().success(handleResponse);
 
     // Widget méteo
     $scope.dailyWeather = weatherService.getDailyWeather();

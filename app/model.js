@@ -24,13 +24,6 @@ function updateMaxDistanceBetweenTwoRecharge(distance){
   // update bdd
 }
 
-function getMaxDistanceBetweenTwoRecharge(){
-  // request bdd
-  return maxDistanceBetweenTwoRecharge;
-}
-
-
-
 // Period must be : year, month, week or hour....
 function getDistance(period){
   var distance = 0;
