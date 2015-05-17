@@ -251,3 +251,11 @@ webikeApp.factory('Auth', ['$http', '$cookieStore', '$rootScope', 'UserAPI',
         }
     };
   }]);
+
+  webikeApp.factory('ItinerairesAPI', ['$http', function ($http){
+    return {
+        getItineraires: function (){
+          return $http.get(IP_SERVER + "itineraires");
+        }
+    };
+  }]);

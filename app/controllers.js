@@ -16,53 +16,64 @@ webikeControllers.controller('LoginController', ['$scope', '$location', 'Auth',
   		};
   }]);
 
-webikeControllers.controller('HistoryController', ['$scope', '$http', 'uiGmapGoogleMapApi',
-  function ($scope, $http, uiGmapGoogleMapApi) {
-    $scope.itineraries = distances;
-    $scope.itinerary = {};
+webikeControllers.controller('HistoryController', ['$scope', '$http', 'uiGmapGoogleMapApi', 'ItinerairesAPI',
+  function ($scope, $http, uiGmapGoogleMapApi, ItinerairesAPI) {
+    
 
-    $scope.selectedIndex = -1; // Whatever the default selected index is, use -1 for no selection
+    / * handle response sucess getBatterie */
+    
+    var handleResponse = function (data, status){
+      $scope.itineraries = data;
+      $scope.itinerary = {};
 
-    $scope.itinerarySelected = function ($index) {
-      $scope.selectedIndex = $index;
-      
-      $scope.itinerary = {
-        date : distances[$index].date.jour + "/" + distances[$index].date.mois + "/" + distances[$index].date.annee + " - " + distances[$index].date.h + "h" + distances[$index].date.m,
-        depart: distances[$index].depart.text, 
-        arrivee: distances[$index].arrivee.text, 
-        vitesse_max: distances[$index].vitesse_max, 
-        vitesse_moy: distances[$index].vitesse_moy, 
-        calories: distances[$index].calories, 
-        alt_max: distances[$index].altitude_max, 
-        alt_min: distances[$index].altitude_min
+      $scope.selectedIndex = -1; // Whatever the default selected index is, use -1 for no selection
+
+      $scope.itinerarySelected = function ($index) {
+        $scope.selectedIndex = $index;
+        
+        $scope.itinerary = {
+          date : data[$index].date.jour + "/" + data[$index].date.mois + "/" + data[$index].date.annee + " - " + data[$index].date.h + "h" + data[$index].date.m,
+          depart: data[$index].depart.text, 
+          arrivee: data[$index].arrivee.text, 
+          vitesse_max: data[$index].vitesse_max, 
+          vitesse_moy: data[$index].vitesse_moy, 
+          calories: data[$index].calories, 
+          alt_max: data[$index].altitude_max, 
+          alt_min: data[$index].altitude_min
+        };
+        var dep_lat = data[$index].depart.lat;
+        var dep_long = data[$index].depart.long;
+        var arr_lat = data[$index].arrivee.lat;
+        var arr_long = data[$index].arrivee.long;
+
+        var cent_lat = (dep_lat + arr_lat)/2;
+        var cent_long = (dep_long + arr_long)/2;
+
+
+        $scope.map = { center: { latitude: cent_lat, longitude: cent_long }, zoom: 13 };
+        $scope.markers = [{
+          id: 0,
+          coords: {
+              latitude: dep_lat,
+              longitude: dep_long
+          },
+          icon: "img/green-dot.png"
+          }, {
+          id: 1,
+          coords: {
+              latitude: arr_lat,
+              longitude: arr_long
+          },
+          icon: "img/red-dot.png"
+        }];
+
       };
-      var dep_lat = distances[$index].depart.lat;
-      var dep_long = distances[$index].depart.long;
-      var arr_lat = distances[$index].arrivee.lat;
-      var arr_long = distances[$index].arrivee.long;
+    }
 
-      var cent_lat = (dep_lat + arr_lat)/2;
-      var cent_long = (dep_long + arr_long)/2;
+    
+    ItinerairesAPI.getItineraires().success(handleResponse);
+    
 
-
-      $scope.map = { center: { latitude: cent_lat, longitude: cent_long }, zoom: 13 };
-      $scope.markers = [{
-        id: 0,
-        coords: {
-            latitude: dep_lat,
-            longitude: dep_long
-        },
-        icon: "img/green-dot.png"
-        }, {
-        id: 1,
-        coords: {
-            latitude: arr_lat,
-            longitude: arr_long
-        },
-        icon: "img/red-dot.png"
-      }];
-
-    };
 
   }]);
 
