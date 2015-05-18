@@ -1,5 +1,5 @@
 var webikeControllers = angular.module('webikeControllers', []);
-
+var distances;
 /* ----------------------------------- CONTROLLERS ----------------------------------- */
 
 webikeControllers.controller('LoginController', ['$scope', '$location', 'Auth',
@@ -78,8 +78,8 @@ webikeControllers.controller('HistoryController', ['$scope', '$http', 'uiGmapGoo
 
   }]);
 
-webikeControllers.controller('HomeController', ['$scope', '$http', 'BatteryLevelPolling', 'batteryLevel', 'weatherService', 'BatterieAPI',
-  function ($scope, $http, BatteryLevelPolling, batteryLevel, weatherService, BatterieAPI) {
+webikeControllers.controller('HomeController', ['$scope', '$http', 'BatteryLevelPolling', 'batteryLevel', 'weatherService', 'BatterieAPI','ItinerairesAPI',
+  function ($scope, $http, BatteryLevelPolling, batteryLevel, weatherService, BatterieAPI, ItinerairesAPI) {
    
     // start polling
     BatteryLevelPolling.startPolling();
@@ -98,22 +98,35 @@ webikeControllers.controller('HomeController', ['$scope', '$http', 'BatteryLevel
     );
 
     // Widget All Time Record
-    $scope.maxSpeed = getMaxSpeed();
+    var dateLastRecharge;
+    var maxDistance;
+    var handleResponseBattery =  function (data, status){
+      dateLastRecharge = {jour: data[0].lastRecharge.day , mois: data[0].lastRecharge.month, annee: data[0].lastRecharge.year }
+      maxDistance = data[0].maxDistanceBetweenRecharge;
 
-    var handleResponse =  function (data, status){
-      var dateLastRecharge = {jour: data[0].lastRecharge.day , mois: data[0].lastRecharge.month, annee: data[0].lastRecharge.year }
+      ItinerairesAPI.getItineraires().success(handleResponseItineraires);
+
+    }
+
+    var handleResponseItineraires = function (data,status){
+      distances = data;
+
+      // Max speed
+      $scope.maxSpeed = getMaxSpeed();
+
+      // Max distance
       var distance = getDistanceSinceLastRecharge(dateLastRecharge);
-      var maxDistance = data[0].maxDistanceBetweenRecharge;
+      
       
       if(distance > maxDistance){
         $scope.maxDistance = distance.toFixed(1);
-        updateMaxDistanceBetweenTwoRecharge(distance);
+        BatterieAPI.updateDistanceMax(distance).success(function(){});
       }else{
         $scope.maxDistance = maxDistance.toFixed(1);
       }
 
       // Widget distances parcoures
-      $scope.totaleDistance = getTotaleDistance();
+      $scope.totaleDistance = getTotaleDistance().toFixed(1);
 
       var weekDist = getDistance("week");
       updateDistance("Week",weekDist);
@@ -125,7 +138,7 @@ webikeControllers.controller('HomeController', ['$scope', '$http', 'BatteryLevel
       updateDistance("Year",yearDist);
     }
 
-    BatterieAPI.getBatterie().success(handleResponse);
+    BatterieAPI.getBatterie().success(handleResponseBattery);
 
     // Widget méteo
     $scope.dailyWeather = weatherService.getDailyWeather();

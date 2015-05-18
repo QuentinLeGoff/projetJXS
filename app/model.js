@@ -20,10 +20,6 @@ function getDistanceSinceLastRecharge(dateLastRecharge){
   return distance;
 }
 
-function updateMaxDistanceBetweenTwoRecharge(distance){
-  // update bdd
-}
-
 // Period must be : year, month, week or hour....
 function getDistance(period){
   var distance = 0;
