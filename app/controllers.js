@@ -30,21 +30,23 @@ webikeControllers.controller('HistoryController', ['$scope', '$http', 'uiGmapGoo
 
       $scope.itinerarySelected = function ($index) {
         $scope.selectedIndex = $index;
+        var tab_index = (data.length-1) - $index;
+        console.log(tab_index);
         
         $scope.itinerary = {
-          date : data[$index].date.jour + "/" + data[$index].date.mois + "/" + data[$index].date.annee + " - " + data[$index].date.h + "h" + data[$index].date.m,
-          depart: data[$index].depart.text, 
-          arrivee: data[$index].arrivee.text, 
-          vitesse_max: data[$index].vitesse_max, 
-          vitesse_moy: data[$index].vitesse_moy, 
-          calories: data[$index].calories, 
-          alt_max: data[$index].altitude_max, 
-          alt_min: data[$index].altitude_min
+          date : data[tab_index].date.jour + "/" + data[tab_index].date.mois + "/" + data[tab_index].date.annee + " - " + data[tab_index].date.h + "h" + data[tab_index].date.m,
+          depart: data[tab_index].depart.text, 
+          arrivee: data[tab_index].arrivee.text, 
+          vitesse_max: data[tab_index].vitesse_max, 
+          vitesse_moy: data[tab_index].vitesse_moy, 
+          calories: data[tab_index].calories, 
+          alt_max: data[tab_index].altitude_max, 
+          alt_min: data[tab_index].altitude_min
         };
-        var dep_lat = data[$index].depart.lat;
-        var dep_long = data[$index].depart.long;
-        var arr_lat = data[$index].arrivee.lat;
-        var arr_long = data[$index].arrivee.long;
+        var dep_lat = data[tab_index].depart.lat;
+        var dep_long = data[tab_index].depart.long;
+        var arr_lat = data[tab_index].arrivee.lat;
+        var arr_long = data[tab_index].arrivee.long;
 
         var cent_lat = (dep_lat + arr_lat)/2;
         var cent_long = (dep_long + arr_long)/2;

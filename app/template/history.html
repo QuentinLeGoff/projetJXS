@@ -18,7 +18,7 @@
 		<div class="span7">
 			<h1>Historique des trajets</h1>
 				<div ng-repeat="it in itineraries | orderBy :'-id'" >
-					<div class="priority low" ng-if="it.date.jour != itineraries[$index - 1].date.jour || it.date.mois != itineraries[$index - 1].date.mois || it.date.annee != itineraries[$index - 1].date.annee"><span>{{it.date.jour}} {{it.date.mois | monthName}} {{it.date.annee}}</span></div>
+					<div class="priority low" ng-if="it.date.jour != itineraries[itineraries.length-$index].date.jour || it.date.mois != itineraries[itineraries.length-$index].date.mois || it.date.annee != itineraries[itineraries.length-$index].date.annee"><span>{{it.date.jour}} {{it.date.mois | monthName}} {{it.date.annee}}</span></div>
 
 					<div class="task low itinerary" ng-class="{ 'it_selected': $index == selectedIndex }" ng-click="itinerarySelected($index)">
 						<div class="desc">
