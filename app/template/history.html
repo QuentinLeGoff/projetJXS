@@ -3,7 +3,7 @@
 <!-- end: Main Menu -->
 
 <!-- start: Content -->
-<div id="content" class="span10">
+<div id="content" class="span10" >
 	<ul class="breadcrumb">
 		<li>
 			<i class="icon-home"></i>
@@ -13,23 +13,23 @@
 		<li><a href="#/history">Mon historique</a></li>
 	</ul>
 
-	<div class="row-fluid">
+	<div class="row-fluid" 
 		<!-- start: Widgets of History -->
 		<div class="span7">
 			<h1>Historique des trajets</h1>
-			<div ng-repeat="it in itineraries">
-				<div class="priority low" ng-if="it.date.jour != itineraries[$index - 1].date.jour || it.date.mois != itineraries[$index - 1].date.mois || it.date.annee != itineraries[$index - 1].date.annee"><span>{{it.date.jour}} {{it.date.mois | monthName}} {{it.date.annee}}</span></div>
+				<div ng-repeat="it in itineraries | orderBy :'-id'" >
+					<div class="priority low" ng-if="it.date.jour != itineraries[$index - 1].date.jour || it.date.mois != itineraries[$index - 1].date.mois || it.date.annee != itineraries[$index - 1].date.annee"><span>{{it.date.jour}} {{it.date.mois | monthName}} {{it.date.annee}}</span></div>
 
-				<div class="task low itinerary" ng-class="{ 'it_selected': $index == selectedIndex }" ng-click="itinerarySelected($index)">
-					<div class="desc">
-						<div class="title">{{it.depart.text}} - {{it.arrivee.text}}</div>
-						<div>Durée: {{it.duree.m}} mins</div>
-					</div>
-					<div class="time">
-						<div class="date">{{it.distance}} KM</div>
+					<div class="task low itinerary" ng-class="{ 'it_selected': $index == selectedIndex }" ng-click="itinerarySelected($index)">
+						<div class="desc">
+							<div class="title">{{it.depart.text}} - {{it.arrivee.text}}</div>
+							<div>Durée: {{it.duree.m}} mins</div>
+						</div>
+						<div class="time">
+							<div class="date">{{it.distance}} KM</div>
+						</div>
 					</div>
 				</div>
-			</div>
 		</div>
 
 		<div class="span5 noMarginLeft">
