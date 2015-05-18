@@ -119,7 +119,7 @@ webikeControllers.controller('HomeController', ['$scope', '$http', 'BatteryLevel
       
       if(distance > maxDistance){
         $scope.maxDistance = distance.toFixed(1);
-        updateMaxDistanceBetweenTwoRecharge(distance);
+        BatterieAPI.updateDistanceMax(distance).success(function(){});
       }else{
         $scope.maxDistance = maxDistance.toFixed(1);
       }
