@@ -148,9 +148,36 @@ webikeControllers.controller('HomeController', ['$scope', '$http', 'BatteryLevel
 
 
 // Performance controller
-webikeControllers.controller('PerformancesController', ['$scope', '$http',
-  function ($scope, $http) {
+webikeControllers.controller('PerformancesController', ['$scope', '$http', 'ItinerairesAPI',
+  function ($scope, $http, ItinerairesAPI) {
 
+    function gd(date) {
+        return new Date(date.annee, date.mois - 1, date.jour).getTime();
+    }
+
+    function contains(array,val){
+      for (var i in array){
+        if(array[i][0] == val) return i;
+      }
+      return -1;
+    }
+
+    var handleResponse =  function (data, status){
+      
+      // construit la série de données
+      var tab = [];
+      for(var i = 0; i < data.length; i++){
+        var index = contains(tab,gd(data[i].date))
+        if( index != -1 ){
+          tab[index][1] += data[i].distance;
+        }else{
+          tab.push([gd(data[i].date),data[i].distance]);
+        }
+      }
+
+      initChart(tab);
+    }
+    ItinerairesAPI.getItineraires().success(handleResponse);
   }]);
   
 
@@ -321,4 +348,46 @@ function updateDistance(period,value){
         })
       }
     });
+}
+
+function initChart ( value ) {
+  if($("#graph_perf").length){
+  
+    var stack = 0, bars = false, lines = true, steps = false;
+
+    function plotWithOptions() {
+      $.plot($("#graph_perf"), [ value ], {
+        xaxis: {
+          mode: "time",
+          timeformat: "%d/%m"
+        },
+        series: {
+            label: "km parcourus",
+             lines: { show: true, lineWidth: 2},
+             points: { show: true },
+             shadowSize: 2
+        },
+        grid: { hoverable: true, 
+               clickable: true, 
+               tickColor: "#dddddd",
+               borderWidth: 0 
+        },
+        colors: ["#FA5833"]
+      });
+    }
+
+    plotWithOptions();
+
+    $("#graph_perf").bind("plothover", function (event, pos, item) {
+      if ( item ){
+        var km = item.datapoint[1];
+        var date = moment(item.datapoint[0]).locale("fr");
+
+        $("#hoverdata").html("<b>&nbsp; &nbsp;" + km +  " km le " + date.format('DD MMMM YYYY')+"</b>");
+      } else {
+        $("#hoverdata").html("<br/>");
+      }
+    });
+
+  }
 }
