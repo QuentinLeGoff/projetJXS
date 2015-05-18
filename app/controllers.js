@@ -31,8 +31,7 @@ webikeControllers.controller('HistoryController', ['$scope', '$http', 'uiGmapGoo
       $scope.itinerarySelected = function ($index) {
         $scope.selectedIndex = $index;
         var tab_index = (data.length-1) - $index;
-        console.log(tab_index);
-        
+
         $scope.itinerary = {
           date : data[tab_index].date.jour + "/" + data[tab_index].date.mois + "/" + data[tab_index].date.annee + " - " + data[tab_index].date.h + "h" + data[tab_index].date.m,
           depart: data[tab_index].depart.text, 
