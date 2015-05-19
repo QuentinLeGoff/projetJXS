@@ -152,6 +152,7 @@ webikeControllers.controller('HomeController', ['$scope', '$http', 'BatteryLevel
 webikeControllers.controller('PerformancesController', ['$scope', '$http', 'ItinerairesAPI',
   function ($scope, $http, ItinerairesAPI) {
 
+
     function gd(date) {
         return new Date(date.annee, date.mois - 1, date.jour).getTime();
     }
@@ -164,7 +165,8 @@ webikeControllers.controller('PerformancesController', ['$scope', '$http', 'Itin
     }
 
     var handleResponse =  function (data, status){
-      
+      distances = data;
+      $scope.totaleDistance = getTotaleDistance().toFixed(1);
       // construit la série de données
       var tab = [];
       for(var i = 0; i < data.length; i++){
