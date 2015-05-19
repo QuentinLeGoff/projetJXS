@@ -1,8 +1,7 @@
 /* INDEX - HOME */
 .logo {
-	height: 45px;
-	padding-top: 4px;
-	padding-left:10px;
+	height:45px;
+	padding-top: 8px;
 }
 .nav-tabs>.active>a:focus{
 	color: #fff;
