@@ -110,6 +110,7 @@ webikeControllers.controller('HomeController', ['$scope', '$http', 'BatteryLevel
 
     var handleResponseItineraires = function (data,status){
       distances = data;
+      $scope.vitesseMoyenne = getAverageSpeed();
 
       // Max speed
       $scope.maxSpeed = getMaxSpeed();

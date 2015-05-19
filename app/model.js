@@ -1,3 +1,13 @@
+function getAverageSpeed (){
+  var speed = 0;
+  for(i in distances){
+    speed += distances[i].vitesse_moy;
+  }
+
+  speed = speed / distances.length;
+  return speed.toFixed(1);
+}
+
 function getMaxSpeed(){
   var speed = distances[0].vitesse_max;
   for(var i=1; i<distances.length;i++){
